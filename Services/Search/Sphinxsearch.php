@@ -119,6 +119,7 @@ class Sphinxsearch
 		if( $escapeQuery )
 			$query = $this->sphinx->escapeString($query);
 
+		$indexnames = '';
 		$results = array();
 		foreach( $indexes as $label => $options ) {
 			/**
@@ -139,13 +140,19 @@ class Sphinxsearch
 			if( isset($options['field_weights']) )
 				$this->sphinx->setFieldWeights($options['field_weights']);
 
-			/**
-			 * Perform the query.
-			 */
-			$results[$label] = $this->sphinx->query($query, $this->indexes[$label]);
-			if( $results[$label]['status'] !== SEARCHD_OK )
-				throw new \RuntimeException(sprintf('Searching index "%s" for "%s" failed with error "%s".', $label, $query, $this->sphinx->getLastError()));
+			/*
+			* Create string of index names for query function.
+			*/
+			$indexnames .= $this->indexes[$label].' ';
 		}
+
+		/**
+		 * Perform the query.
+		 */
+		$results = $this->sphinx->query($query, $indexnames);
+
+		if( $results['status'] !== SEARCHD_OK )
+			throw new \RuntimeException(sprintf('Searching index "%s" for "%s" failed with error "%s".', $label, $query, $this->sphinx->getLastError()));
 
 		/**
 		 * If only one index was searched, return that index's results directly.
