@@ -141,7 +141,7 @@ class Sphinxsearch
 				$this->sphinx->setFieldWeights($options['field_weights']);
 
 			/*
-			* Create string of index names for query function.
+			* Create string of index names for SphinxAPI query function.
 			*/
 			$indexnames .= $this->indexes[$label].' ';
 		}
