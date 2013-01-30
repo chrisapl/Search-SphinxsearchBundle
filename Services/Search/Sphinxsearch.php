@@ -132,7 +132,7 @@ class Sphinxsearch
 			 * Set the offset and limit for the returned results.
 			 */
 			if( isset($options['result_offset']) && isset($options['result_limit']) )
-				$this->sphinx->setLimits($options['result_offset'], $options['result_limit']);
+				$this->sphinx->setLimits($options['result_offset'], $options['result_limit'],5000);
 
 			/**
 			 * Weight the individual fields.
@@ -164,5 +164,52 @@ class Sphinxsearch
 		 * FIXME: Throw an exception if $results is empty?
 		 */
 		return $results;
+	}
+
+	/**
+	 * Reset all previously set filters.
+	 *
+	 */
+        public function resetFilters() {
+		$this->sphinx->resetFilters();
+	}
+
+	/**
+	 * Adds query with the current settings to multi-query batch. This method doesn't affect current settings (sorting, filtering, grouping etc.) in any way.
+	 * @param string $query The query string that we are searching for.
+	 * @param array $indexes The indexes to perform the search on.
+	 *
+         * $indexes = array(
+	 *   'IndexLabel',
+         *   'IndexLabel2'
+         *  );
+	 */
+        public function addQuery($search_str, $indexes) {
+		$indexnames = '';
+
+		//Create string on index names
+		foreach( $indexes as $label) {
+
+			/**
+			 * Ensure that the label corresponds to a defined index.
+			 */
+			if(isset($this->indexes[$label])){
+
+				/*
+				* Create string of index names for SphinxAPI query function.
+				*/
+				$indexnames .= $this->indexes[$label].' ';
+			} 
+		}
+
+		$this->sphinx->addQuery($search_str, $indexnames);
+	}
+
+       /**
+	* Connects to searchd, runs a batch of all queries added using SphinxClient::addQuery, obtains and returns the result sets.
+	*
+        */
+       public function runQueries() {
+		return $this->sphinx->runQueries();
 	}
 }
