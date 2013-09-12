@@ -121,7 +121,9 @@ class Sphinxsearch
 
 		$indexnames = '';
 		$results = array();
+		$i = 0;
 		foreach( $indexes as $label => $options ) {
+		
 			/**
 			 * Ensure that the label corresponds to a defined index.
 			 */
@@ -143,7 +145,11 @@ class Sphinxsearch
 			/*
 			* Create string of index names for SphinxAPI query function.
 			*/
-			$indexnames .= $this->indexes[$label].' ';
+			if($i == 1){
+				$indexnames .= ' ';
+			}
+			$indexnames .= $this->indexes[$label];
+			$i++;
 		}
 
 		/**
