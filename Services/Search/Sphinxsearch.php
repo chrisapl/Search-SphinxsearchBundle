@@ -134,7 +134,7 @@ class Sphinxsearch
 			 * Set the offset and limit for the returned results.
 			 */
 			if( isset($options['result_offset']) && isset($options['result_limit']) )
-				$this->sphinx->setLimits($options['result_offset'], $options['result_limit'],5000);
+				$this->sphinx->setLimits($options['result_offset'], $options['result_limit'],20000);
 
 			/**
 			 * Weight the individual fields.
