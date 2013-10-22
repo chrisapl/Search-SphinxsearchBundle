@@ -211,11 +211,27 @@ class Sphinxsearch
 		$this->sphinx->addQuery($search_str, $indexnames);
 	}
 
-       /**
+   /**
 	* Connects to searchd, runs a batch of all queries added using SphinxClient::addQuery, obtains and returns the result sets.
 	*
-        */
-       public function runQueries() {
+    */
+    public function runQueries() {
 		return $this->sphinx->runQueries();
 	}
+
+	/**
+	* Set sort mode for search.
+	* @param $mode Sortmode as specifed in Sphinx API Doc on of: 
+	*		SPH_SORT_RELEVANCE	Sort by relevance in descending order (best matches first).
+	*		SPH_SORT_ATTR_DESC	Sort by an attribute in descending order (bigger attribute values first).
+	*		SPH_SORT_ATTR_ASC	Sort by an attribute in ascending order (smaller attribute values first).
+	*		SPH_SORT_TIME_SEGMENTS	Sort by time segments (last hour/day/week/month) in descending order, and then by relevance in descending order.
+	*		SPH_SORT_EXTENDED	Sort by SQL-like combination of columns in ASC/DESC order.
+	*		SPH_SORT_EXPR
+	* @param $sortby String name of field to sort.
+	*/
+	public function setSortMode($mode, $sortby){
+		$this->sphinx->setSortMode($mode, $sortby);
+	}
 }
+
