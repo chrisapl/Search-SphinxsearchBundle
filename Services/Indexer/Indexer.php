@@ -2,7 +2,7 @@
 
 namespace Search\SphinxsearchBundle\Services\Indexer;
 
-use Assetic\Util\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder;
 
 class Indexer
 {
@@ -65,6 +65,7 @@ class Indexer
 		if( is_array($indexes) ) {
 			foreach( $indexes as &$label ) {
 				if( isset($this->indexes[$label]) )
+			
 					$pb->add($this->indexes[$label]['index_name']);
 			}
 		} elseif( is_string($indexes) ) {
